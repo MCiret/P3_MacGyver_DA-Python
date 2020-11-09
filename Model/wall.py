@@ -2,4 +2,5 @@ from Model.tile import Tile
 
 
 class Wall(Tile):
-    pass
+    def __repr__(self):
+        return "██"

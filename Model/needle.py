@@ -2,4 +2,5 @@ from Model.item import Item
 
 
 class Needle(Item):
-    pass
+    def __repr__(self):
+        return "NN"

@@ -2,5 +2,5 @@ from Model.item import Item
 
 
 class Ether(Item):
-    pass
-
+    def __repr__(self):
+        return "EE"

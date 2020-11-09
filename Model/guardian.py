@@ -2,5 +2,5 @@ from Model.character import Character
 
 
 class Guardian(Character):
-    pass
-
+    def __repr__(self):
+        return "GD"

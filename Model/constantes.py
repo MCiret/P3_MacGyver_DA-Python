@@ -1,5 +1,5 @@
 # dict use by model.py to match maze ascii character and class when loading the maze
-ascii_to_class_dict = {
+ASCII_TO_CLASS_DICT = {
     '█': "Wall",
     '░': "Hallway",
     'M': "MacGyver",
@@ -9,4 +9,6 @@ ascii_to_class_dict = {
     'N': "Needle"
 }
 
-items_list = ["Ether", "Tube", "Needle"]
+ITEMS_LIST = ["Ether", "Tube", "Needle"]
+
+MAZE_NB_ROOMS_PER_SIDE = 15

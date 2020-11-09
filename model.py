@@ -1,5 +1,5 @@
 from random import sample
-from Model.constantes import ascii_to_class_dict, items_list
+from Model.constantes import ASCII_TO_CLASS_DICT, ITEMS_LIST
 from Model.needle import Needle
 from Model.ether import Ether
 from Model.tube import Tube
@@ -21,7 +21,7 @@ class Maze:
                 keep_char = True
                 for char in line:
                     if keep_char:
-                        empty_maze_list.append(globals()[ascii_to_class_dict[char]]())
+                        empty_maze_list.append(globals()[ASCII_TO_CLASS_DICT[char]]())
                         keep_char = False
                     else:
                         keep_char = True
@@ -49,26 +49,6 @@ class Maze:
         :param built_maze_list: (list) maze rooms (class) builded using the load_from_file() above
         :param rand_items_pos: (list) index (int) for placing the 3 items in the maze list
         """
-        for pos, item_str in zip(rand_items_pos, items_list):
+        for pos, item_str in zip(rand_items_pos, ITEMS_LIST):
             print(item_str, " --> ", pos)
             built_maze_list[pos] = globals()[item_str]()
-
-
-def main():
-    curr_maze_list = []
-    Maze.load_from_file(curr_maze_list)
-    Maze.add_items(Maze.rand_items_pos(Maze.hallway_index_list(curr_maze_list)), curr_maze_list)
-
-    ### Maze displaying ###
-    i = 1
-    for elem in curr_maze_list:
-        if i % 15 == 0:
-            print(type(elem))
-            i += 1
-        else:
-            print(type(elem), end="")
-            i += 1
-    ########################
-
-
-main()
