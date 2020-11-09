@@ -9,3 +9,4 @@ ascii_to_class_dict = {
     'N': "Needle"
 }
 
+items_list = ["Ether", "Tube", "Needle"]
