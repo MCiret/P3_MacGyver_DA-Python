@@ -7,6 +7,7 @@ def main():
     Maze.load_from_file(curr_maze_list)
     Maze.add_items(Maze.rand_items_pos(Maze.hallway_index_list(curr_maze_list)), curr_maze_list)
     View.maze_display(curr_maze_list)
+    View.user_input_to_int()
 
 
 main()

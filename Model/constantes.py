@@ -12,3 +12,6 @@ ASCII_TO_CLASS_DICT = {
 ITEMS_LIST = ["Ether", "Tube", "Needle"]
 
 MAZE_NB_ROOMS_PER_SIDE = 15
+
+USER_MOVE_CMD = ['north', 'n', 'south', 's', 'east', 'e', 'west', 'w']
+USER_QUIT_CMD = ['quit', 'q']
