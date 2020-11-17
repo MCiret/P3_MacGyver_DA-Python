@@ -3,9 +3,25 @@ from model import Model
 from view import View
 from Model.mac_gyver import MacGyver
 from Model.hallway import Hallway
+from Model.needle import Needle
+from Model.ether import Ether
+from Model.tube import Tube
 
 
 class Control:
+    @staticmethod
+    def add_items(rand_items_pos, built_maze_list):
+        """
+        The :param builded_maze_list modified = 3 Hallway class instances replacing with items classes instances
+        :param built_maze_list: (list) maze tiles (class) builded using the load_from_file() above
+        :param rand_items_pos: (list) index (int) for placing the 3 items in the maze list
+        """
+        assert(type(rand_items_pos) is list and len(rand_items_pos) == 3)
+        assert(type(built_maze_list) is list and len(built_maze_list) == cste.MAZE_NB_TILES_PER_SIDE**2)
+
+        for pos, item_str in zip(rand_items_pos, cste.ITEMS_LIST):
+            built_maze_list[pos] = globals()[item_str]()
+
     @staticmethod
     def initialize_game(empty_list):
         """
@@ -17,10 +33,12 @@ class Control:
         :return: (list) The hallways indexes list
 
         """
+        # PYGAME images = ascii char...
         Model.maze_load_from_file(empty_list)
+        # PYGAME Model.maze_load_from_file(empty_list, images)
         # Actually, from this point empty_list is no longer empty. It has been filled by side effect..
         Model.hallway_index_list(empty_list)
-        Model.add_items(Model.rand_items_pos(), empty_list)
+        Control.add_items(Model.rand_items_pos(), empty_list)
 
     @staticmethod
     def check_user_input(user_move_entry):

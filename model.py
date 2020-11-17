@@ -54,19 +54,6 @@ class Model:
         return sample(Model.GAME_STARTING_MAZE_HALLWAYS_INDEX_LIST, k=3)
 
     @staticmethod
-    def add_items(rand_items_pos, built_maze_list):
-        """
-        The :param builded_maze_list modified = 3 Hallway class instances replacing with items classes instances
-        :param built_maze_list: (list) maze tiles (class) builded using the load_from_file() above
-        :param rand_items_pos: (list) index (int) for placing the 3 items in the maze list
-        """
-        assert(type(rand_items_pos) is list and len(rand_items_pos) == 3)
-        assert(type(built_maze_list) is list and len(built_maze_list) == cste.MAZE_NB_TILES_PER_SIDE**2)
-
-        for pos, item_str in zip(rand_items_pos, cste.ITEMS_LIST):
-            built_maze_list[pos] = globals()[item_str]()
-
-    @staticmethod
     def is_wall(maze_square_id):
         """
         :param maze_square_id: (int) one maze square index
@@ -86,13 +73,13 @@ class Model:
         assert(type(move_cmd) is int)
         assert(type(mg_current_pos_id) is int)
 
-        if move_cmd in ["north", "n", -15]:  # north move <=> -15 squares
+        if move_cmd == -15:  # north move <=> -15 squares
             return mg_current_pos_id < (cste.MAZE_NB_TILES_PER_SIDE-1)  # MG is on the northern edge of the maze
-        elif move_cmd in ["south", "s", 15]:  # south move <=> +15 squares
+        elif move_cmd == 15:  # south move <=> +15 squares
             return mg_current_pos_id > (cste.MAZE_NB_TILES_PER_SIDE**2) - 1 - cste.MAZE_NB_TILES_PER_SIDE  # MG is on the southern edge of the maze
-        elif move_cmd in ["west", "w", -1]:  # west move <=> -1 square
+        elif move_cmd == -1:  # west move <=> -1 square
             return mg_current_pos_id % 15 == 0  # MG is on the western edge of the maze
-        elif move_cmd in ["east", "e", 1]:  # east move <=> +1 square
+        elif move_cmd == 1:  # east move <=> +1 square
             return (mg_current_pos_id+1) % 15 == 0  # MG is on the eastern edge of the maze
 
     @staticmethod
