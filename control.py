@@ -17,7 +17,9 @@ class Control:
         :return: (list) The hallways indexes list
 
         """
+        # PYGAME --> pictures = ....
         Model.maze_load_from_file(empty_list)
+        # PYGAME --> Model.maze_load_from_file(empty_list, pictures)
         # Actually, from this point empty_list is no longer empty. It has been filled by side effect..
         Model.hallway_index_list(empty_list)
         Model.add_items(Model.rand_items_pos(), empty_list)
