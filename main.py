@@ -1,4 +1,3 @@
-import view as v
 import control as c
 
 
