@@ -10,13 +10,14 @@ ASCII_TO_CLASS_DICT = {
 }
 
 ASCII_TO_PICTURE_DICT = {
-    '█': "Wall", # value = picture
-    '░': "Hallway",
-    'M': "MacGyver",
-    'G': "Guardian",
-    'E': "Ether",
-    'T': "Tube",
-    'N': "Needle"
+    '█': "Resources/my_tile.wall.png", # value = path picture
+    '░': "Resources/my_tile.hallway.png",
+    'M': "Resources/MacGyver.png",
+    'G': "Resources/guardian.png",
+    'E': "Resources/ether.png",
+    'T': "Resources/plastic_tube.png",
+    'N': "Resources/needle.png",
+    'A': "Resources/anesthetic.png"
 }
 
 ITEMS_LIST = ["Ether", "Tube", "Needle"]
