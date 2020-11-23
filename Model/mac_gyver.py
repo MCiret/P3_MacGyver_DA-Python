@@ -8,4 +8,3 @@ class MacGyver(Character):
     # Allows the list.index(MacGyver())
     def __eq__(self, other):
         return isinstance(other, MacGyver)
-

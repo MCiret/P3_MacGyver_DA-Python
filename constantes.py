@@ -1,4 +1,13 @@
 # dict use by model.py to match maze ascii character and class when loading the maze
+
+MAZE_LVL1 = "Resources/Maze_lvl1.txt"
+NB_SPRITE_SIDE = 15
+TAILLE_SPRITE = 30
+MAZE_SIDE_SIZE = NB_SPRITE_SIDE * TAILLE_SPRITE
+WINDOW_WIDTH = MAZE_SIDE_SIZE + 100
+WINDOW_HEIGHT = MAZE_SIDE_SIZE + 150
+WINDOW_TITLE = "Game : Help MacGyver to escape from a maze !"
+
 ASCII_TO_CLASS_DICT = {
     '█': "Wall",
     '░': "Hallway",
@@ -9,23 +18,21 @@ ASCII_TO_CLASS_DICT = {
     'N': "Needle"
 }
 
+ITEMS_CHAR_LIST = ['E', 'T', 'N']
+
 ASCII_TO_PICTURE_DICT = {
-    '█': "Resources/my_tile.wall.png", # value = path picture
-    '░': "Resources/my_tile.hallway.png",
-    'M': "Resources/MacGyver.png",
-    'G': "Resources/guardian.png",
-    'E': "Resources/ether.png",
-    'T': "Resources/plastic_tube.png",
-    'N': "Resources/needle.png",
-    'A': "Resources/anesthetic.png"
+    '█': "Resources/my_tile_wall.png",  # value = path picture
+    '░': "Resources/my_tile_hallway.png",
+    'M': "Resources/my_tile_macgyver.png",
+    'G': "Resources/my_tile_guardian.png",
+    'E': "Resources/my_tile_ether.png",
+    'T': "Resources/my_tile_plastic_tube.png",
+    'N': "Resources/my_tile_needle.png",
+    'A': "Resources/my_tile_anesthetic.png"
 }
-
-ITEMS_LIST = ["Ether", "Tube", "Needle"]
-
-MAZE_NB_TILES_PER_SIDE = 15
 
 USER_INPUT_CMD = {'north': -15, 'n': -15,
                   'south': 15, 's': 15,
-                  'east': -1, 'e': -1,
-                  'west': 1, 'w': 1,
+                  'east': 1, 'e': 1,
+                  'west': -1, 'w': -1,
                   'quit': 0, 'q': 0}
