@@ -12,132 +12,172 @@ pygame.init()
 
 
 class Control:
+    """
+    To initialize and use/calculate data according to user inputs.
+    Remark : because the program uses pygame module, user inputs are handled
+    here (in pygame loops) instead of handled by the view part.
+    """
     @staticmethod
     def initialize_game(empty_list):
         """
-        1) Reads the text file and loads corresponding classes in the :param empty_list (side effect).
-        2) Creates a maze hallways indexes list (Model class attribute).
-        3) 3 different indexes are randomly chosen in the hallways and directly used to place the 3 items
-        4) Returns the maze hallways indexes list to a later usage when MG is moved..
+        1) Creates the main pygame window
+        2) Reads the text file and loads corresponding Tile subclasses
+        in the :param empty_list (side effect);
+        3) Creates a maze hallways indexes list (Model class attribute);
+        4) Items are randomly added in the maze list;
         :param empty_list: (list)
-        :return: (pygame.Surface) a pygame sized window with title and icon
+        :return: (pygame.Surface) the main pygame window created
 
         """
+        assert(type(empty_list) is list and len(empty_list) == 0)
+
+        # Pygame window has to be created before maze_load_from_file() to
+        # enable the loaded picture to be convert
         window = Model.initialize_pygame_window()
         Model.maze_load_from_file(empty_list)
-        # Actually, from this point empty_list is no longer empty. It has been filled by side effect..
+        # From this point empty_list is no longer empty (side effect).
         Model.hallway_index_dict(empty_list)
         Model.add_items(Model.rand_items_pos(), empty_list)
         return window
 
     @staticmethod
-    def user_input_to_int(user_cmd_entry):
+    def str_move_to_int(str_move):
         """
-        :param user_cmd_entry: (str) The command entered by user (to move or to quit)
-        :return: (int) A number corresponding to :param user_cmd_entry :
-        - If a move is asked, this number is add/subtract from the current MacGyver index in maze list :
-                -1 = w / west ; +1 = e / east ; -15 = n / north ; +15 = s / south
-        - If quit is asked : 0
+        :param str_move: (str) Direction corresponding to the arrow key pressed
+        by user.
+        :return: (int) The number to be added/subtracted to the MacGyver
+        current index in the maze list.
         """
-        assert(type(user_cmd_entry) is str)
+        assert(type(str_move) is str and str_move in cste.USER_INPUT_CMD)
 
-        return cste.USER_INPUT_CMD[user_cmd_entry]
+        return cste.USER_INPUT_CMD[str_move]
 
     @staticmethod
-    def is_move_possible(mg_pos_id, move_code, built_maze_list, window):
+    def is_move_possible(mg_current_pos_id, move_code, window):
         """
-        If the movement is not possible (wall or maze edge), a message is displayed and False is returned.
-        Else, True is returned.
-        :param mg_pos_id: (int) the current MG index in the maze list
-        :param move_code: (int) Number will be added/subtracted to the current MG index to move him as user asked
-        :param built_maze_list: (list) maze (class)
-        :return: (bool) True if the movement is possible
+        Each time Mac Gyver moves, checks if it possible (i.e the destination
+        is not a wall or maze edge). A text is displayed to inform user.
+        :param mg_current_pos_id: (int) the current MG index in the maze list.
+        :param move_code: (int) Number to be be added/subtracted to the
+        current MG index.
+        :param window: (pygame.Surface) main window.
+        :return: (bool) True if the movement is possible.
         """
-        assert (type(mg_pos_id) is int)
-        assert (type(move_code) is int and move_code in (-1, 1, -15, 15))
+        assert (type(mg_current_pos_id) is int
+                and mg_current_pos_id in range(0, cste.NB_SPRITE_SIDE ** 2))
+        assert (type(move_code) is int
+                and move_code in cste.USER_INPUT_CMD.values())
+        assert (type(window) is pygame.Surface)
 
-        if Model.is_out_of_maze(move_code, mg_pos_id):
+        if Model.is_out_of_maze(move_code, mg_current_pos_id):
             View.impossible_move_msg(1, window)
             return False
         else:
-            if Model.is_wall(mg_pos_id + move_code):
+            if Model.is_wall(mg_current_pos_id + move_code):
                 View.impossible_move_msg(2, window)
                 return False
             else:
                 return True
 
     @staticmethod
-    def calculate_dest_id(mg_pos_id, asked_move_nb):
+    def calculate_dest_id(mg_current_pos_id, move_code):
         """
-        :param mg_pos_id: (int) the current MG index in the maze list
-        :param asked_move_nb: (int) Number will be added/subtracted to the current MG index to move him as user asked
-        :return: (int) the new MG index in the maze list
+        :param mg_current_pos_id: (int) the current MG index in the maze list.
+        :param move_code: (int) Number will be added/subtracted to the
+        current MG index to move him as user asked.
+        :return: (int) the MG destination index in the maze list.
         """
-        assert(type(mg_pos_id) is int)
-        assert(type(asked_move_nb) is int and asked_move_nb in (-1, 1, -15, 15))
+        assert (type(mg_current_pos_id) is int
+                and mg_current_pos_id in range(0, cste.NB_SPRITE_SIDE ** 2))
+        assert (type(move_code) is int
+                and move_code in cste.USER_INPUT_CMD.values())
 
-        return mg_pos_id + asked_move_nb
+        return mg_current_pos_id + move_code
 
     @staticmethod
-    def move_mg(built_maze_list, move_nb, window):
+    def move_mg(built_maze_list, move_code, window):
         """
-        :param built_maze_list: (list) maze (class)
-        :param move_nb: (int) Number add/subtract to the current MG index (obtained from user_input_to_int())
+        :param built_maze_list: (list) maze tiles (Tile subclasses)
+        :param move_code: (int) Number add/subtract to the current MG index to
+        move him in the maze list.
+        :param window: (pygame.Surface) main window.
         """
-        assert(type(built_maze_list) is list and len(built_maze_list) == cste.NB_SPRITE_SIDE ** 2)
-        assert(type(move_nb) is int)
+        assert(type(built_maze_list) is list
+               and len(built_maze_list) == cste.NB_SPRITE_SIDE ** 2)
+        assert (type(move_code) is int
+                and move_code in cste.USER_INPUT_CMD.values())
+        assert (type(window) is pygame.Surface)
 
         # get the current MG position in maze
         curr_mg_id = built_maze_list.index(MacGyver())
-        if Control.is_move_possible(curr_mg_id, move_nb, built_maze_list, window):
-            dest_maze_id = Control.calculate_dest_id(curr_mg_id, move_nb)
-            if isinstance(built_maze_list[dest_maze_id], Item) or isinstance(built_maze_list[dest_maze_id], Guardian):
+        if Control.is_move_possible(curr_mg_id, move_code, window):
+            dest_maze_id = Control.calculate_dest_id(curr_mg_id, move_code)
+            # If MG goes in an item ou guardian tile,
+            # a new tile has to be instanced :
+            if (isinstance(built_maze_list[dest_maze_id], Item)
+                    or isinstance(built_maze_list[dest_maze_id], Guardian)):
                 built_maze_list[dest_maze_id] = built_maze_list[curr_mg_id]
                 for char_key in cste.ASCII_TO_CLASS_DICT:
                     if cste.ASCII_TO_CLASS_DICT[char_key] == "Hallway":
                         hallway_picture_key = char_key
                 built_maze_list[curr_mg_id] = Hallway(Model.PICTURES_DICT[hallway_picture_key])
+            # Else, just reverses MG and hallway instances in the list :
             else:
                 tmp_mg_instance = built_maze_list[curr_mg_id]
-                tmp_dest_instance = built_maze_list[Control.calculate_dest_id(curr_mg_id, move_nb)]
+                tmp_dest_instance = built_maze_list[
+                    Control.calculate_dest_id(curr_mg_id, move_code)]
                 built_maze_list[dest_maze_id] = tmp_mg_instance
                 built_maze_list[curr_mg_id] = tmp_dest_instance
 
     @staticmethod
     def check_items(built_maze_list, window):
         """
-        :param built_maze_list:
-        :return:
+        Each time Mac Gyver moves, checks how many items have been founded and
+        update the counter (text) displaying. And if all items have been
+        founded, an anesthetic picture is displayed.
+        :param built_maze_list: (list) maze tiles (Tile subclasses)
+        :param window: (pygame.Surface) main window.
         """
-        View.display_items_counter(len(cste.ITEMS_CHAR_LIST) - Model.how_many_items_in_maze(built_maze_list), window)
+        assert (type(built_maze_list) is list
+                and len(built_maze_list) == cste.NB_SPRITE_SIDE ** 2)
+        assert (type(window) is pygame.Surface)
+
+        View.display_items_counter(len(cste.ITEMS_CHAR_LIST)
+                                   - Model.how_many_items_in_maze(built_maze_list),
+                                   window)
 
         if Model.how_many_items_in_maze(built_maze_list) == 0:
             anesthetic_item = Tile(Model.PICTURES_DICT['A'])
-            View.display_anesthetic_made_picture(window, anesthetic_item.picture)
+            View.display_picture_maze_right_side(window,
+                                                 anesthetic_item.picture)
 
     @staticmethod
     def is_game_failure(built_maze_list):
         """
-        Called only if MG has reached the guardian tile (end of while is_guardian() loop in game_playing())
+        If MG has reached the Guardian tile, checks how many items have been
+        founded.
         :param built_maze_list: (list) maze (int)
         :return: (bool) True
         """
-        assert(type(built_maze_list) is list and len(built_maze_list) == cste.NB_SPRITE_SIDE ** 2)
+        assert(type(built_maze_list) is list
+               and len(built_maze_list) == cste.NB_SPRITE_SIDE ** 2)
 
         return Model.how_many_items_in_maze(built_maze_list)
 
     @staticmethod
     def game_playing():
-
+        # MAIN LOOP
         run = True
         while run:
+            # Initializes the maze list and creates the pygame main window
             maze_list = []
             window = Control.initialize_game(maze_list)
             View.display_game_rules(window)
-            View.maze_display_terminal(maze_list)
             View.maze_display(maze_list, window)
+
             game_playing = True
             game_ending = False
+            # RUNNING GAME LOOP (user moves inputs enabled)
             while game_playing:
                 pygame.time.Clock().tick(30)  # to limit loop speed
                 for user_event in pygame.event.get():
@@ -147,16 +187,16 @@ class Control:
                     elif user_event.type == KEYDOWN:
                         View.display_game_rules(window)
                         if user_event.key == K_DOWN:
-                            user_nb_move = Control.user_input_to_int("south")
+                            user_nb_move = Control.str_move_to_int("south")
                             Control.move_mg(maze_list, user_nb_move, window)
                         elif user_event.key == K_UP:
-                            user_nb_move = Control.user_input_to_int("north")
+                            user_nb_move = Control.str_move_to_int("north")
                             Control.move_mg(maze_list, user_nb_move, window)
                         elif user_event.key == K_RIGHT:
-                            user_nb_move = Control.user_input_to_int("east")
+                            user_nb_move = Control.str_move_to_int("east")
                             Control.move_mg(maze_list, user_nb_move, window)
                         elif user_event.key == K_LEFT:
-                            user_nb_move = Control.user_input_to_int("west")
+                            user_nb_move = Control.str_move_to_int("west")
                             Control.move_mg(maze_list, user_nb_move, window)
                 # View.maze_display_terminal(built_maze_list)
                 View.maze_display(maze_list, window)
@@ -166,6 +206,7 @@ class Control:
                     game_playing = False
                     game_ending = True
 
+            # RESULTS GAME LOOP (user moves inputs disabled)
             while game_ending:
                 pygame.time.Clock().tick(30)  # to limit loop speed
                 if Control.is_game_failure(maze_list) > 0:
@@ -178,10 +219,8 @@ class Control:
                 for user_event in pygame.event.get():
                     if user_event.type == QUIT:
                         run = False
-                        game_playing = False
                         game_ending = False
                     elif user_event.type == KEYDOWN:
-                        game_playing = True
                         game_ending = False
 
 
