@@ -112,15 +112,17 @@ class Control:
         curr_mg_id = built_maze_list.index(MacGyver())
         if Control.is_move_possible(curr_mg_id, move_code, window):
             dest_maze_id = Control.calculate_dest_id(curr_mg_id, move_code)
-            # If MG goes in an item ou guardian tile,
+
+            # If MG goes to item ou guardian tile,
             # a new tile has to be instanced :
             if (isinstance(built_maze_list[dest_maze_id], Item)
                     or isinstance(built_maze_list[dest_maze_id], Guardian)):
                 built_maze_list[dest_maze_id] = built_maze_list[curr_mg_id]
-                for char_key in cste.ASCII_TO_CLASS_DICT:
-                    if cste.ASCII_TO_CLASS_DICT[char_key] == "Hallway":
-                        hallway_picture_key = char_key
-                built_maze_list[curr_mg_id] = Hallway(Model.PICTURES_DICT[hallway_picture_key])
+                for char_key in cste.MAZE_ASCII_TO_CLASS_DICT:
+                    if cste.MAZE_ASCII_TO_CLASS_DICT[char_key] == "Hallway":
+                        built_maze_list[curr_mg_id] = \
+                            Hallway(Model.MAZE_CHAR_TO_PICTURES_DICT[char_key])
+
             # Else, just reverses MG and hallway instances in the list :
             else:
                 tmp_mg_instance = built_maze_list[curr_mg_id]
@@ -132,9 +134,9 @@ class Control:
     @staticmethod
     def check_items(built_maze_list, window):
         """
-        Each time Mac Gyver moves, checks how many items have been founded and
+        Each time Mac Gyver moves, checks how many items have been found and
         update the counter (text) displaying. And if all items have been
-        founded, an anesthetic picture is displayed.
+        found, an anesthetic picture is displayed.
         :param built_maze_list: (list) maze tiles (Tile subclasses)
         :param window: (pygame.Surface) main window.
         """
@@ -142,27 +144,27 @@ class Control:
                 and len(built_maze_list) == cste.NB_SPRITE_SIDE ** 2)
         assert (type(window) is pygame.Surface)
 
-        View.display_items_counter(len(cste.ITEMS_CHAR_LIST)
-                                   - Model.how_many_items_in_maze(built_maze_list),
-                                   window)
+        found_items_list = Model.check_items_in_maze(built_maze_list)
 
-        if Model.how_many_items_in_maze(built_maze_list) == 0:
-            anesthetic_item = Tile(Model.PICTURES_DICT['A'])
-            View.display_picture_maze_right_side(window,
+        View.display_items_counter(found_items_list, window)
+
+        if len(found_items_list) == len(cste.ITEMS_PICTURES_PATH_DICT):
+            anesthetic_item = Tile(Model.OTHERS_PICTURE_DICT["All found items"])
+            View.display_all_items_found_picture(window,
                                                  anesthetic_item.picture)
 
     @staticmethod
     def is_game_failure(built_maze_list):
         """
         If MG has reached the Guardian tile, checks how many items have been
-        founded.
+        found.
         :param built_maze_list: (list) maze (int)
         :return: (bool) True
         """
         assert(type(built_maze_list) is list
                and len(built_maze_list) == cste.NB_SPRITE_SIDE ** 2)
 
-        return Model.how_many_items_in_maze(built_maze_list)
+        return len(Model.check_items_in_maze(built_maze_list))
 
     @staticmethod
     def game_playing():
@@ -209,7 +211,8 @@ class Control:
             # RESULTS GAME LOOP (user moves inputs disabled)
             while game_ending:
                 pygame.time.Clock().tick(30)  # to limit loop speed
-                if Control.is_game_failure(maze_list) > 0:
+                if Control.is_game_failure(maze_list) \
+                        < len(cste.ITEMS_PICTURES_PATH_DICT):
                     # MG has not got the 3 items required to win :
                     View.end_of_game_msg(0, window)
                 else:

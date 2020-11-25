@@ -16,9 +16,12 @@ class Model:
     """
     To load and/or check data.
     """
+
+    MAZE_CHAR_TO_PICTURES_DICT = {}
+    ITEMS_TO_PICTURE_DICT = {}
+    OTHERS_PICTURE_DICT = {}
     MAZE_HALLWAYS_INDEX_DICT = {"all_hallways": [], "guardian_tile": -1,
                                 "macgyver_start_tile": -1}
-    PICTURES_DICT = {}
 
     @staticmethod
     def initialize_pygame_window():
@@ -29,22 +32,30 @@ class Model:
         """
         window = pygame.display.set_mode((cste.WINDOW_WIDTH,
                                           cste.WINDOW_HEIGHT))
-        icon = pygame.image.load(cste.ASCII_TO_PICTURE_DICT['M'])
+        icon = pygame.image.load(cste.MAZE_ASCII_TO_PICTURE_PATH_DICT['M'])
         pygame.display.set_icon(icon)
         pygame.display.set_caption(cste.WINDOW_TITLE)
         return window
 
     @classmethod
-    def load_pictures(cls):
+    def load_all_game_pictures(cls):
         """
-        Filled the class attribute PICTURE_DICT (dict) with pictures
+        Filled the 3 dictionaries (class attribute) with pictures
         loaded with pygame.
         Each picture is a Tile() instance attribute.
         """
-        if len(Model.PICTURES_DICT) == 0:
-            for char_key in cste.ASCII_TO_PICTURE_DICT:
-                cls.PICTURES_DICT[char_key] = \
-                    pygame.image.load(cste.ASCII_TO_PICTURE_DICT[char_key]).convert()
+        if len(cls.MAZE_CHAR_TO_PICTURES_DICT) == 0:
+            for char_key in cste.MAZE_ASCII_TO_PICTURE_PATH_DICT:
+                cls.MAZE_CHAR_TO_PICTURES_DICT[char_key] = \
+                    pygame.image.load(cste.MAZE_ASCII_TO_PICTURE_PATH_DICT[char_key]).convert()
+        if len(cls.ITEMS_TO_PICTURE_DICT) == 0:
+            for item_str_key in cste.ITEMS_PICTURES_PATH_DICT:
+                cls.ITEMS_TO_PICTURE_DICT[item_str_key] = \
+                    pygame.image.load(cste.ITEMS_PICTURES_PATH_DICT[item_str_key]).convert()
+        if len(cls.OTHERS_PICTURE_DICT) == 0:
+            for other_str_key in cste.OTHER_PICTURES_PATH_DICT:
+                cls.OTHERS_PICTURE_DICT[other_str_key] = \
+                    pygame.image.load(cste.OTHER_PICTURES_PATH_DICT[other_str_key]).convert()
 
     @staticmethod
     def maze_load_from_file(empty_maze_list):
@@ -57,7 +68,7 @@ class Model:
         """
         assert(type(empty_maze_list) is list and len(empty_maze_list) == 0)
 
-        Model.load_pictures()
+        Model.load_all_game_pictures()
 
         with open(cste.MAZE_LVL1, encoding="utf-8") as f:
             for line in f:
@@ -67,7 +78,8 @@ class Model:
                 keep_char = True
                 for char in line:
                     if keep_char:
-                        tile = globals()[cste.ASCII_TO_CLASS_DICT[char]](Model.PICTURES_DICT[char])
+                        tile = globals()[cste.MAZE_ASCII_TO_CLASS_DICT[char]]\
+                                        (Model.MAZE_CHAR_TO_PICTURES_DICT[char])
                         empty_maze_list.append(tile)
                         keep_char = False
                     else:
@@ -120,12 +132,13 @@ class Model:
         in the maze list.
         """
         assert(type(rand_items_pos) is list
-               and len(rand_items_pos) == len(cste.ITEMS_CHAR_LIST))
+               and len(rand_items_pos) == len(cste.ITEMS_PICTURES_PATH_DICT))
         assert(type(built_maze_list) is list
                and len(built_maze_list) == cste.NB_SPRITE_SIDE ** 2)
 
-        for pos, item_char in zip(rand_items_pos, cste.ITEMS_CHAR_LIST):
-            built_maze_list[pos] = globals()[cste.ASCII_TO_CLASS_DICT[item_char]](Model.PICTURES_DICT[item_char])
+        for pos, item in zip(rand_items_pos, cste.ITEMS_PICTURES_PATH_DICT):
+            built_maze_list[pos] = \
+                globals()[item](Model.ITEMS_TO_PICTURE_DICT[item])
 
     @staticmethod
     def is_wall(maze_tile_id):
@@ -176,18 +189,15 @@ class Model:
         return built_maze_list.count(Guardian()) == 0
 
     @staticmethod
-    def how_many_items_in_maze(built_maze_list):
+    def check_items_in_maze(built_maze_list):
         """
         :param built_maze_list: (list) maze tiles (Tile subclasses)
-        :return: (int) Number of items in the maze.
+        :return: (list) Found items (str).
         """
         assert(type(built_maze_list) is list
                and len(built_maze_list) == cste.NB_SPRITE_SIDE ** 2)
 
-        res_nb_items = 0
-        for item in (item_class for item_class in
-                     (globals()[cste.ASCII_TO_CLASS_DICT[item_char]]()
-                      for item_char in cste.ITEMS_CHAR_LIST)):
-            res_nb_items += built_maze_list.count(item)
+        return [item for item in (item_str
+                for item_str in cste.ITEMS_PICTURES_PATH_DICT
+                if built_maze_list.count(globals()[item_str]()) == 0)]
 
-        return res_nb_items

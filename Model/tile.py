@@ -11,7 +11,7 @@ class Tile:
         """
         :param picture: (pygame.Surface) picture representing each room in the
         maze. This picture side size (pixel) should be the same than
-        TAILLE_SPRITE in constantes.py.
+        SPRITE_SIZE in constantes.py.
         """
         self.picture = picture
 
