@@ -70,11 +70,11 @@ class Control:
         assert (type(window) is pygame.Surface)
 
         if Model.is_out_of_maze(move_code, mg_current_pos_id):
-            View.impossible_move_msg(1, window)
+            View.impossible_move_text(1, window)
             return False
         else:
             if Model.is_wall(mg_current_pos_id + move_code):
-                View.impossible_move_msg(2, window)
+                View.impossible_move_text(2, window)
                 return False
             else:
                 return True
@@ -156,8 +156,8 @@ class Control:
     @staticmethod
     def is_game_failure(built_maze_list):
         """
-        If MG has reached the Guardian tile, checks how many items have been
-        found.
+        Each time Mac Gyver moves, checks if he has reached the Guardian tile.
+        If so, it checks if all items has been found.
         :param built_maze_list: (list) maze (int)
         :return: (bool) True
         """
@@ -174,7 +174,7 @@ class Control:
             # Initializes the maze list and creates the pygame main window
             maze_list = []
             window = Control.initialize_game(maze_list)
-            View.display_game_rules(window)
+            View.display_game_rules(window, Model.OTHERS_PICTURE_DICT["Move cmd"])
             View.maze_display(maze_list, window)
 
             game_playing = True
@@ -187,7 +187,7 @@ class Control:
                         run = False
                         game_playing = False
                     elif user_event.type == KEYDOWN:
-                        View.display_game_rules(window)
+                        View.display_game_rules(window, Model.OTHERS_PICTURE_DICT["Move cmd"])
                         if user_event.key == K_DOWN:
                             user_nb_move = Control.str_move_to_int("south")
                             Control.move_mg(maze_list, user_nb_move, window)
@@ -214,10 +214,10 @@ class Control:
                 if Control.is_game_failure(maze_list) \
                         < len(cste.ITEMS_PICTURES_PATH_DICT):
                     # MG has not got the 3 items required to win :
-                    View.end_of_game_msg(0, window)
+                    View.end_of_game_text(0, window)
                 else:
                     # MG has got the 3 items required to win :
-                    View.end_of_game_msg(1, window)
+                    View.end_of_game_text(1, window)
                 pygame.display.flip()
                 for user_event in pygame.event.get():
                     if user_event.type == QUIT:
@@ -225,6 +225,3 @@ class Control:
                         game_ending = False
                     elif user_event.type == KEYDOWN:
                         game_ending = False
-
-
-

@@ -14,12 +14,14 @@ pygame.init()
 
 class Model:
     """
-    To load and/or check data.
+    To load and/or read and check data.
     """
 
+    # Pictures dict filled with class method load_all_game_pictures()
     MAZE_CHAR_TO_PICTURES_DICT = {}
     ITEMS_TO_PICTURE_DICT = {}
     OTHERS_PICTURE_DICT = {}
+    # Maze structure dict filled with class method hallway_index_dict()
     MAZE_HALLWAYS_INDEX_DICT = {"all_hallways": [], "guardian_tile": -1,
                                 "macgyver_start_tile": -1}
 
