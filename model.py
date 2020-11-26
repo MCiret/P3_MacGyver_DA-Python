@@ -8,8 +8,6 @@ from Model.ether import Ether
 from Model.tube import Tube
 from random import sample
 import pygame
-from pygame import *
-pygame.init()
 
 
 class Model:
@@ -25,20 +23,6 @@ class Model:
     MAZE_HALLWAYS_INDEX_DICT = {"all_hallways": [], "guardian_tile": -1,
                                 "macgyver_start_tile": -1}
 
-    @staticmethod
-    def initialize_pygame_window():
-        """
-        Used to obtain the pygame window before game initializing.
-        :return: (pygame.Surface) An initialized pygame main window (size,
-        title and icon).
-        """
-        window = pygame.display.set_mode((cste.WINDOW_WIDTH,
-                                          cste.WINDOW_HEIGHT))
-        icon = pygame.image.load(cste.MAZE_ASCII_TO_PICTURE_PATH_DICT['M'])
-        pygame.display.set_icon(icon)
-        pygame.display.set_caption(cste.WINDOW_TITLE)
-        return window
-
     @classmethod
     def load_all_game_pictures(cls):
         """
@@ -49,15 +33,15 @@ class Model:
         if len(cls.MAZE_CHAR_TO_PICTURES_DICT) == 0:
             for char_key in cste.MAZE_ASCII_TO_PICTURE_PATH_DICT:
                 cls.MAZE_CHAR_TO_PICTURES_DICT[char_key] = \
-                    pygame.image.load(cste.MAZE_ASCII_TO_PICTURE_PATH_DICT[char_key]).convert()
+                    pygame.image.load(cste.MAZE_ASCII_TO_PICTURE_PATH_DICT[char_key])
         if len(cls.ITEMS_TO_PICTURE_DICT) == 0:
             for item_str_key in cste.ITEMS_PICTURES_PATH_DICT:
                 cls.ITEMS_TO_PICTURE_DICT[item_str_key] = \
-                    pygame.image.load(cste.ITEMS_PICTURES_PATH_DICT[item_str_key]).convert()
+                    pygame.image.load(cste.ITEMS_PICTURES_PATH_DICT[item_str_key])
         if len(cls.OTHERS_PICTURE_DICT) == 0:
             for other_str_key in cste.OTHER_PICTURES_PATH_DICT:
                 cls.OTHERS_PICTURE_DICT[other_str_key] = \
-                    pygame.image.load(cste.OTHER_PICTURES_PATH_DICT[other_str_key]).convert()
+                    pygame.image.load(cste.OTHER_PICTURES_PATH_DICT[other_str_key])
 
     @staticmethod
     def maze_load_from_file(empty_maze_list):

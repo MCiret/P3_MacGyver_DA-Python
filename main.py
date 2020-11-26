@@ -27,4 +27,5 @@ def main():
     c.Control.game_playing()
 
 
-main()
+if __name__ == "__main__":
+    main()
