@@ -1,8 +1,6 @@
 import constantes as cste
 import pygame
-from pygame import *
-
-pygame.init()
+pygame.font.init()
 
 
 class View:

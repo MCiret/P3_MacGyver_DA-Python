@@ -1,6 +1,3 @@
-import pygame
-
-
 class Tile:
     """
     A tile = a room in the maze. It is the base class for all different

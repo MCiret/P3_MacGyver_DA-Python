@@ -7,8 +7,6 @@ from Model.guardian import Guardian
 from Model.mac_gyver import MacGyver
 from Model.hallway import Hallway
 import pygame
-from pygame import *
-pygame.init()
 
 
 class Control:
@@ -20,11 +18,10 @@ class Control:
     @staticmethod
     def initialize_game(empty_list):
         """
-        1) Creates the main pygame window
-        2) Reads the text file and loads corresponding Tile subclasses
+        1) Reads the text file and loads corresponding Tile subclasses
         in the :param empty_list (side effect);
-        3) Creates a maze hallways indexes list (Model class attribute);
-        4) Items are randomly added in the maze list;
+        2) Creates a maze hallways indexes list (Model class attribute);
+        3) Items are randomly added in the maze list;
         :param empty_list: (list)
         :return: (pygame.Surface) the main pygame window created
 
@@ -33,12 +30,10 @@ class Control:
 
         # Pygame window has to be created before maze_load_from_file() to
         # enable the loaded picture to be convert
-        window = Model.initialize_pygame_window()
         Model.maze_load_from_file(empty_list)
         # From this point empty_list is no longer empty (side effect).
         Model.hallway_index_dict(empty_list)
         Model.add_items(Model.rand_items_pos(), empty_list)
-        return window
 
     @staticmethod
     def str_move_to_int(str_move):
@@ -173,7 +168,12 @@ class Control:
         while run:
             # Initializes the maze list and creates the pygame main window
             maze_list = []
-            window = Control.initialize_game(maze_list)
+            Control.initialize_game(maze_list)
+            window = pygame.display.set_mode((cste.WINDOW_WIDTH,
+                                              cste.WINDOW_HEIGHT))
+            icon = pygame.image.load(cste.MAZE_ASCII_TO_PICTURE_PATH_DICT['M'])
+            pygame.display.set_icon(icon)
+            pygame.display.set_caption(cste.WINDOW_TITLE)
             View.display_game_rules(window, Model.OTHERS_PICTURE_DICT["Move cmd"])
             View.maze_display(maze_list, window)
 
@@ -183,21 +183,21 @@ class Control:
             while game_playing:
                 pygame.time.Clock().tick(30)  # to limit loop speed
                 for user_event in pygame.event.get():
-                    if user_event.type == QUIT:
+                    if user_event.type == pygame.QUIT:
                         run = False
                         game_playing = False
-                    elif user_event.type == KEYDOWN:
+                    elif user_event.type == pygame.KEYDOWN:
                         View.display_game_rules(window, Model.OTHERS_PICTURE_DICT["Move cmd"])
-                        if user_event.key == K_DOWN:
+                        if user_event.key == pygame.K_DOWN:
                             user_nb_move = Control.str_move_to_int("south")
                             Control.move_mg(maze_list, user_nb_move, window)
-                        elif user_event.key == K_UP:
+                        elif user_event.key == pygame.K_UP:
                             user_nb_move = Control.str_move_to_int("north")
                             Control.move_mg(maze_list, user_nb_move, window)
-                        elif user_event.key == K_RIGHT:
+                        elif user_event.key == pygame.K_RIGHT:
                             user_nb_move = Control.str_move_to_int("east")
                             Control.move_mg(maze_list, user_nb_move, window)
-                        elif user_event.key == K_LEFT:
+                        elif user_event.key == pygame.K_LEFT:
                             user_nb_move = Control.str_move_to_int("west")
                             Control.move_mg(maze_list, user_nb_move, window)
                 # View.maze_display_terminal(built_maze_list)
@@ -220,8 +220,8 @@ class Control:
                     View.end_of_game_text(1, window)
                 pygame.display.flip()
                 for user_event in pygame.event.get():
-                    if user_event.type == QUIT:
+                    if user_event.type == pygame.QUIT:
                         run = False
                         game_ending = False
-                    elif user_event.type == KEYDOWN:
+                    elif user_event.type == pygame.KEYDOWN:
                         game_ending = False
