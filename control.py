@@ -1,4 +1,5 @@
 import constantes as cste
+import pictures_manager as pm
 from model import Model
 from view import View
 from Model.tile import Tile
@@ -33,6 +34,7 @@ class Control:
         Model.maze_load_from_file(empty_list)
         # From this point empty_list is no longer empty (side effect).
         Model.hallway_index_dict(empty_list)
+        print(Model.MAZE_HALLWAYS_INDEX_DICT)
         Model.add_items(Model.rand_items_pos(), empty_list)
 
     @staticmethod
@@ -115,8 +117,7 @@ class Control:
                 built_maze_list[dest_maze_id] = built_maze_list[curr_mg_id]
                 for char_key in cste.MAZE_ASCII_TO_CLASS_DICT:
                     if cste.MAZE_ASCII_TO_CLASS_DICT[char_key] == "Hallway":
-                        built_maze_list[curr_mg_id] = \
-                            Hallway(Model.MAZE_CHAR_TO_PICTURES_DICT[char_key])
+                        built_maze_list[curr_mg_id] = Hallway()
 
             # Else, just reverses MG and hallway instances in the list :
             else:
@@ -143,10 +144,10 @@ class Control:
 
         View.display_items_counter(found_items_list, window)
 
-        if len(found_items_list) == len(cste.ITEMS_PICTURES_PATH_DICT):
-            anesthetic_item = Tile(Model.OTHERS_PICTURE_DICT["All found items"])
+        if len(found_items_list) == len(cste.ITEMS_LIST):
+            anesthetic_item = pm.PictureManager.get_class_picture("All found items")
             View.display_all_items_found_picture(window,
-                                                 anesthetic_item.picture)
+                                                 anesthetic_item)
 
     @staticmethod
     def is_game_failure(built_maze_list):
@@ -171,10 +172,9 @@ class Control:
             Control.initialize_game(maze_list)
             window = pygame.display.set_mode((cste.WINDOW_WIDTH,
                                               cste.WINDOW_HEIGHT))
-            icon = pygame.image.load(cste.MAZE_ASCII_TO_PICTURE_PATH_DICT['M'])
-            pygame.display.set_icon(icon)
+            pygame.display.set_icon(pm.PictureManager.get_class_picture("MacGyver"))
             pygame.display.set_caption(cste.WINDOW_TITLE)
-            View.display_game_rules(window, Model.OTHERS_PICTURE_DICT["Move cmd"])
+            View.display_game_rules(window, pm.PictureManager.get_class_picture("Move cmd"))
             View.maze_display(maze_list, window)
 
             game_playing = True
@@ -187,7 +187,7 @@ class Control:
                         run = False
                         game_playing = False
                     elif user_event.type == pygame.KEYDOWN:
-                        View.display_game_rules(window, Model.OTHERS_PICTURE_DICT["Move cmd"])
+                        View.display_game_rules(window, pm.PictureManager.get_class_picture("Move cmd"))
                         if user_event.key == pygame.K_DOWN:
                             user_nb_move = Control.str_move_to_int("south")
                             Control.move_mg(maze_list, user_nb_move, window)
@@ -212,7 +212,7 @@ class Control:
             while game_ending:
                 pygame.time.Clock().tick(30)  # to limit loop speed
                 if Control.is_game_failure(maze_list) \
-                        < len(cste.ITEMS_PICTURES_PATH_DICT):
+                        < len(cste.ITEMS_LIST):
                     # MG has not got the 3 items required to win :
                     View.end_of_game_text(0, window)
                 else:

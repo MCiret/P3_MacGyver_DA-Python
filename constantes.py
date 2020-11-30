@@ -14,21 +14,17 @@ MAZE_ASCII_TO_CLASS_DICT = {'█': "Wall",
                             'M': "MacGyver",
                             'G': "Guardian"}
 
-# Dict used to load maze tiles pictures from
-# ascii characters in the loaded text file :
-MAZE_ASCII_TO_PICTURE_PATH_DICT = {'█': "Resources/my_tile_wall.png",
-                                   '░': "Resources/my_tile_hallway.png",
-                                   'M': "Resources/my_tile_macgyver.png",
-                                   'G': "Resources/my_tile_guardian.png"}
+PICTURES_PATH_DICT = {"Wall": "Resources/my_tile_wall.png",
+                      "Hallway": "Resources/my_tile_hallway.png",
+                      "MacGyver": "Resources/my_tile_macgyver.png",
+                      "Guardian": "Resources/my_tile_guardian.png",
+                      "Ether": "Resources/my_tile_ether.png",
+                      "Tube": "Resources/my_tile_plastic_tube.png",
+                      "Needle": "Resources/my_tile_needle.png",
+                      "All found items": "Resources/my_tile_anesthetic.png",
+                      "Move cmd": "Resources/move_cmd_picture.png"}
 
-# Dict used to load maze tiles pictures from
-# ascii characters in the loaded text file :
-ITEMS_PICTURES_PATH_DICT = {"Ether": "Resources/my_tile_ether.png",
-                            "Tube": "Resources/my_tile_plastic_tube.png",
-                            "Needle": "Resources/my_tile_needle.png"}
-
-OTHER_PICTURES_PATH_DICT = {"All found items": "Resources/my_tile_anesthetic.png",
-                            "Move cmd": "Resources/move_cmd_picture.png"}
+ITEMS_LIST = ["Ether", "Tube", "Needle"]
 
 USER_INPUT_CMD = {'north': -15, 'n': -15,
                   'south': 15, 's': 15,

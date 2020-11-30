@@ -1,16 +1,14 @@
+import pictures_manager as pm
+
+
 class Tile:
     """
     A tile = a room in the maze. It is the base class for all different
     elements forming the maze (characters, walls, hallways and items).
     """
 
-    def __init__(self, picture=None):
-        """
-        :param picture: (pygame.Surface) picture representing each room in the
-        maze. This picture side size (pixel) should be the same than
-        SPRITE_SIZE in constantes.py.
-        """
-        self.picture = picture
+    def __init__(self):
+        self.picture = ""
 
     def draw_tile(self, window, x, y):
         """

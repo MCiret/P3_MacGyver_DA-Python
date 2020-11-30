@@ -21,6 +21,7 @@ my_tile_wall.png
 """
 
 import control as c
+import pictures_manager as pm
 
 
 def main():

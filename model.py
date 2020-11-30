@@ -1,4 +1,6 @@
 import constantes as cste
+import pictures_manager as pm
+from Model.tile import Tile
 from Model.wall import Wall
 from Model.hallway import Hallway
 from Model.mac_gyver import MacGyver
@@ -15,33 +17,9 @@ class Model:
     To load and/or read and check data.
     """
 
-    # Pictures dict filled with class method load_all_game_pictures()
-    MAZE_CHAR_TO_PICTURES_DICT = {}
-    ITEMS_TO_PICTURE_DICT = {}
-    OTHERS_PICTURE_DICT = {}
     # Maze structure dict filled with class method hallway_index_dict()
     MAZE_HALLWAYS_INDEX_DICT = {"all_hallways": [], "guardian_tile": -1,
                                 "macgyver_start_tile": -1}
-
-    @classmethod
-    def load_all_game_pictures(cls):
-        """
-        Filled the 3 dictionaries (class attribute) with pictures
-        loaded with pygame.
-        Each picture is a Tile() instance attribute.
-        """
-        if len(cls.MAZE_CHAR_TO_PICTURES_DICT) == 0:
-            for char_key in cste.MAZE_ASCII_TO_PICTURE_PATH_DICT:
-                cls.MAZE_CHAR_TO_PICTURES_DICT[char_key] = \
-                    pygame.image.load(cste.MAZE_ASCII_TO_PICTURE_PATH_DICT[char_key])
-        if len(cls.ITEMS_TO_PICTURE_DICT) == 0:
-            for item_str_key in cste.ITEMS_PICTURES_PATH_DICT:
-                cls.ITEMS_TO_PICTURE_DICT[item_str_key] = \
-                    pygame.image.load(cste.ITEMS_PICTURES_PATH_DICT[item_str_key])
-        if len(cls.OTHERS_PICTURE_DICT) == 0:
-            for other_str_key in cste.OTHER_PICTURES_PATH_DICT:
-                cls.OTHERS_PICTURE_DICT[other_str_key] = \
-                    pygame.image.load(cste.OTHER_PICTURES_PATH_DICT[other_str_key])
 
     @staticmethod
     def maze_load_from_file(empty_maze_list):
@@ -54,7 +32,8 @@ class Model:
         """
         assert(type(empty_maze_list) is list and len(empty_maze_list) == 0)
 
-        Model.load_all_game_pictures()
+        # Pictures loading in the class attribute dict
+        pm.PictureManager()
 
         with open(cste.MAZE_LVL1, encoding="utf-8") as f:
             for line in f:
@@ -64,8 +43,7 @@ class Model:
                 keep_char = True
                 for char in line:
                     if keep_char:
-                        tile = globals()[cste.MAZE_ASCII_TO_CLASS_DICT[char]]\
-                                        (Model.MAZE_CHAR_TO_PICTURES_DICT[char])
+                        tile = globals()[cste.MAZE_ASCII_TO_CLASS_DICT[char]]()
                         empty_maze_list.append(tile)
                         keep_char = False
                     else:
@@ -118,13 +96,13 @@ class Model:
         in the maze list.
         """
         assert(type(rand_items_pos) is list
-               and len(rand_items_pos) == len(cste.ITEMS_PICTURES_PATH_DICT))
+               and len(rand_items_pos) == len(cste.ITEMS_LIST))
         assert(type(built_maze_list) is list
                and len(built_maze_list) == cste.NB_SPRITE_SIDE ** 2)
 
-        for pos, item in zip(rand_items_pos, cste.ITEMS_PICTURES_PATH_DICT):
+        for pos, item in zip(rand_items_pos, cste.ITEMS_LIST):
             built_maze_list[pos] = \
-                globals()[item](Model.ITEMS_TO_PICTURE_DICT[item])
+                globals()[item]()
 
     @staticmethod
     def is_wall(maze_tile_id):
@@ -184,6 +162,6 @@ class Model:
                and len(built_maze_list) == cste.NB_SPRITE_SIDE ** 2)
 
         return [item for item in (item_str
-                for item_str in cste.ITEMS_PICTURES_PATH_DICT
+                for item_str in cste.ITEMS_LIST
                 if built_maze_list.count(globals()[item_str]()) == 0)]
 

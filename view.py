@@ -1,4 +1,5 @@
 import constantes as cste
+import pictures_manager as pm
 import pygame
 pygame.font.init()
 
@@ -153,7 +154,7 @@ class View:
         """
         assert (type(found_items_list) is list
                 and len(found_items_list)
-                in range(0, len(cste.ITEMS_PICTURES_PATH_DICT) + 1))
+                in range(0, len(cste.ITEMS_LIST) + 1))
         assert (type(window) is pygame.Surface)
 
         found_items_text = ""
@@ -163,7 +164,7 @@ class View:
         View.display_text_maze_right_side(window,
                                           f"Mac Gyver has found\n"
                                           f"{len(found_items_list)} of "
-                                          f"{len(cste.ITEMS_PICTURES_PATH_DICT)} items :\n"
+                                          f"{len(cste.ITEMS_LIST)} items :\n"
                                           f"\n \n{found_items_text}",
                                           text_size=14)
 

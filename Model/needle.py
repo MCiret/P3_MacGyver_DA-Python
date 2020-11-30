@@ -1,10 +1,15 @@
 from Model.item import Item
+import pictures_manager as pm
 
 
 class Needle(Item):
     """
     One of the items Tiles that user has to find.
     """
+
+    def __init__(self):
+        super().__init__()
+        self.picture = pm.PictureManager.get_class_picture("Needle")
 
     def __repr__(self):
         """

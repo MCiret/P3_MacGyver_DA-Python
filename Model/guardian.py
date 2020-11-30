@@ -1,4 +1,5 @@
 from Model.character import Character
+import pictures_manager as pm
 
 
 class Guardian(Character):
@@ -6,6 +7,10 @@ class Guardian(Character):
     Fixed tile in the maze. User has to move MacGyver tile to reach this
     Guardian tile.
     """
+
+    def __init__(self):
+        super().__init__()
+        self.picture = pm.PictureManager.get_class_picture("Guardian")
 
     def __repr__(self):
         """
