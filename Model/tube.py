@@ -8,8 +8,7 @@ class Tube(Item):
     """
 
     def __init__(self):
-        super().__init__()
-        self.picture = pm.PictureManager.get_class_picture("Tube")
+        super().__init__(pm.PictureManager.get_class_picture("Tube"))
 
     def __repr__(self):
         """

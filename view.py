@@ -92,35 +92,32 @@ class View:
                                                (x, y)).bottomleft
 
     @staticmethod
-    def display_game_rules(window, picture):
+    def display_game_rules(window):
         """
         Displays the game rules under the maze.
         :param window: (pygame.Surface) main window.
-        :param picture: (pygame.Surface) arrow keys picture.
         """
         assert (type(window) is pygame.Surface)
 
-        rules_text = (f"Welcome !\nMac Gyver is lost in a maze... "
-                      f"Could you help him to escape ?\n"
-                      f"A guardian is watching over the maze exit...\n"
-                      f"Look for items which could help Mac Gyver :\n"
-                      f"   - Ether \n   - Tube \n   - Needle (very discreet)")
+        rules_text = ("Welcome !\nMac Gyver is lost in a maze... "
+                      "Could you help him to escape ?\n"
+                      "A guardian is watching over the maze exit...\n"
+                      "Look for items which could help Mac Gyver :\n"
+                      "   - Ether \n   - Tube \n   - Needle (very discreet)")
         View.display_text_below_maze(window, rules_text)
-        View.display_move_cmde_picture(window, picture)
+        View.display_move_cmde_picture(window)
 
     @staticmethod
-    def display_move_cmde_picture(window, picture):
+    def display_move_cmde_picture(window):
         """
         Displays (right bottom corner) arrow keys picture to inform user about
         the way to move Mac Gyver.
         :param window: (pygame.Surface) main window.
-        :param picture: (pygame.Surface) picture to blit to window.
         """
-        assert (type(window) is pygame.Surface
-                and type(picture) is pygame.Surface)
+        assert (type(window) is pygame.Surface)
 
-        window.blit(picture, (cste.MAZE_SIDE_SIZE / 4 * 3.5,
-                              cste.MAZE_SIDE_SIZE + 50))
+        window.blit(pm.PictureManager.get_class_picture("Move cmd"),
+                    (cste.MAZE_SIDE_SIZE + 40, cste.MAZE_SIDE_SIZE + 40))
 
     @staticmethod
     def impossible_move_text(code, window):
@@ -169,18 +166,17 @@ class View:
                                           text_size=14)
 
     @staticmethod
-    def display_all_items_found_picture(window, picture):
+    def display_all_items_found_picture(window):
         """
         Displays (on the right) an anesthetic picture when all items
         has been found.
         :param window: (pygame.Surface) main window.
-        :param picture: (pygame.Surface) picture to blit to window.
         """
-        assert (type(window) is pygame.Surface
-                and type(picture) is pygame.Surface)
+        assert (type(window) is pygame.Surface)
 
-        window.blit(picture, (cste.MAZE_SIDE_SIZE + 25,
-                              cste.MAZE_SIDE_SIZE / 4 * 2))
+        window.blit(pm.PictureManager.get_class_picture("All found items"),
+                    (cste.MAZE_SIDE_SIZE + 25,
+                     cste.MAZE_SIDE_SIZE / 4 * 2))
 
     @staticmethod
     def end_of_game_text(code, window):

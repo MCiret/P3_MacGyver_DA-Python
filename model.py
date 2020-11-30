@@ -1,6 +1,5 @@
 import constantes as cste
 import pictures_manager as pm
-from Model.tile import Tile
 from Model.wall import Wall
 from Model.hallway import Hallway
 from Model.mac_gyver import MacGyver
@@ -9,7 +8,6 @@ from Model.needle import Needle
 from Model.ether import Ether
 from Model.tube import Tube
 from random import sample
-import pygame
 
 
 class Model:
@@ -33,7 +31,7 @@ class Model:
         assert(type(empty_maze_list) is list and len(empty_maze_list) == 0)
 
         # Pictures loading in the class attribute dict
-        pm.PictureManager()
+        pm.PictureManager.picture_dict_filling()
 
         with open(cste.MAZE_LVL1, encoding="utf-8") as f:
             for line in f:
@@ -164,4 +162,3 @@ class Model:
         return [item for item in (item_str
                 for item_str in cste.ITEMS_LIST
                 if built_maze_list.count(globals()[item_str]()) == 0)]
-

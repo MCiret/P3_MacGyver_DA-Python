@@ -8,8 +8,7 @@ class Wall(Tile):
     """
 
     def __init__(self):
-        super().__init__()
-        self.picture = pm.PictureManager.get_class_picture("Wall")
+        super().__init__(pm.PictureManager.get_class_picture("Wall"))
 
     def __repr__(self):
         """

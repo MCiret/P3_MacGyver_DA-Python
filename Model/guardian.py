@@ -9,8 +9,7 @@ class Guardian(Character):
     """
 
     def __init__(self):
-        super().__init__()
-        self.picture = pm.PictureManager.get_class_picture("Guardian")
+        super().__init__(pm.PictureManager.get_class_picture("Guardian"))
 
     def __repr__(self):
         """

@@ -8,8 +8,7 @@ class Needle(Item):
     """
 
     def __init__(self):
-        super().__init__()
-        self.picture = pm.PictureManager.get_class_picture("Needle")
+        super().__init__(pm.PictureManager.get_class_picture("Needle"))
 
     def __repr__(self):
         """

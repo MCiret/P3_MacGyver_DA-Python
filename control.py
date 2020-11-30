@@ -2,7 +2,6 @@ import constantes as cste
 import pictures_manager as pm
 from model import Model
 from view import View
-from Model.tile import Tile
 from Model.item import Item
 from Model.guardian import Guardian
 from Model.mac_gyver import MacGyver
@@ -34,7 +33,6 @@ class Control:
         Model.maze_load_from_file(empty_list)
         # From this point empty_list is no longer empty (side effect).
         Model.hallway_index_dict(empty_list)
-        print(Model.MAZE_HALLWAYS_INDEX_DICT)
         Model.add_items(Model.rand_items_pos(), empty_list)
 
     @staticmethod
@@ -145,9 +143,7 @@ class Control:
         View.display_items_counter(found_items_list, window)
 
         if len(found_items_list) == len(cste.ITEMS_LIST):
-            anesthetic_item = pm.PictureManager.get_class_picture("All found items")
-            View.display_all_items_found_picture(window,
-                                                 anesthetic_item)
+            View.display_all_items_found_picture(window)
 
     @staticmethod
     def is_game_failure(built_maze_list):
@@ -172,9 +168,10 @@ class Control:
             Control.initialize_game(maze_list)
             window = pygame.display.set_mode((cste.WINDOW_WIDTH,
                                               cste.WINDOW_HEIGHT))
-            pygame.display.set_icon(pm.PictureManager.get_class_picture("MacGyver"))
+            pygame.display.set_icon(pm.PictureManager
+                                    .get_class_picture("MacGyver"))
             pygame.display.set_caption(cste.WINDOW_TITLE)
-            View.display_game_rules(window, pm.PictureManager.get_class_picture("Move cmd"))
+            View.display_game_rules(window)
             View.maze_display(maze_list, window)
 
             game_playing = True
@@ -187,7 +184,7 @@ class Control:
                         run = False
                         game_playing = False
                     elif user_event.type == pygame.KEYDOWN:
-                        View.display_game_rules(window, pm.PictureManager.get_class_picture("Move cmd"))
+                        View.display_game_rules(window)
                         if user_event.key == pygame.K_DOWN:
                             user_nb_move = Control.str_move_to_int("south")
                             Control.move_mg(maze_list, user_nb_move, window)

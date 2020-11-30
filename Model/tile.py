@@ -1,4 +1,3 @@
-import pictures_manager as pm
 
 
 class Tile:
@@ -7,8 +6,8 @@ class Tile:
     elements forming the maze (characters, walls, hallways and items).
     """
 
-    def __init__(self):
-        self.picture = ""
+    def __init__(self, picture):
+        self.picture = picture
 
     def draw_tile(self, window, x, y):
         """
@@ -18,4 +17,3 @@ class Tile:
         :param y: (int) position coordinate
         """
         window.blit(self.picture, (x, y))
-

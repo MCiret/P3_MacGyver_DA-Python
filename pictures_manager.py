@@ -11,7 +11,7 @@ class PictureManager:
     LOADED_PICTURES_DICT = {}
 
     @classmethod
-    def __init__(cls):
+    def picture_dict_filling(cls):
         for str_key in cste.PICTURES_PATH_DICT:
             cls.LOADED_PICTURES_DICT[str_key] = \
                 pygame.image.load(cste.PICTURES_PATH_DICT[str_key])
