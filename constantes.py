@@ -26,7 +26,7 @@ PICTURES_PATH_DICT = {"Wall": "Resources/my_tile_wall.png",
 
 ITEMS_LIST = ["Ether", "Tube", "Needle"]
 
-USER_INPUT_CMD = {'north': -15, 'n': -15,
-                  'south': 15, 's': 15,
+USER_INPUT_CMD = {'north': -NB_SPRITE_SIDE, 'n': -NB_SPRITE_SIDE,
+                  'south': NB_SPRITE_SIDE, 's': NB_SPRITE_SIDE,
                   'east': 1, 'e': 1,
                   'west': -1, 'w': -1}
