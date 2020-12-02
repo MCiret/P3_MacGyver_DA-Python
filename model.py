@@ -128,14 +128,14 @@ class Model:
         assert(type(mg_current_pos_id) is int
                and mg_current_pos_id in range(0, cste.NB_SPRITE_SIDE ** 2))
 
-        if move_cmd == -15:  # north
+        if move_cmd == cste.USER_INPUT_CMD["north"]:  # north
             return mg_current_pos_id < (cste.NB_SPRITE_SIDE - 1)
-        elif move_cmd == 15:  # south
+        elif move_cmd == cste.USER_INPUT_CMD["south"]:  # south
             return mg_current_pos_id > (cste.NB_SPRITE_SIDE ** 2) \
                                         - 1 - cste.NB_SPRITE_SIDE
-        elif move_cmd == -1:  # west
+        elif move_cmd == cste.USER_INPUT_CMD["west"]:  # west
             return mg_current_pos_id % 15 == 0
-        elif move_cmd == 1:  # east
+        elif move_cmd == cste.USER_INPUT_CMD["east"]:  # east
             return (mg_current_pos_id+1) % 15 == 0
 
     @staticmethod
